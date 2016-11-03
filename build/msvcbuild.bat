@@ -13,7 +13,7 @@
 
 @if not defined INCLUDE goto :FAIL
 
-cd ..\src
+@cd ..\src
 
 @setlocal
 @set LJCOMPILE=cl /nologo /c /O2 /W3 /D_CRT_SECURE_NO_DEPRECATE
@@ -72,22 +72,23 @@ buildvm -m vmdef -o jit\vmdef.lua %ALL_LIB%
 buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 @if errorlevel 1 goto :BAD
 
-@if "%1" neq "debug" goto :NODEBUG
-@shift
-@set LJCOMPILE=%LJCOMPILE% /Zi /MTd
-@set LJLINK=%LJLINK% /debug
-@set LJBINDIR=%LJBINDIR%\debug
-@set LJLIBDIR=%LJLIBDIR%\debug
-mkdir %LJBINDIR%
-mkdir %LJINCLUDEDIR%
+@if "%1" neq "debug" (
+	@set LJBINDIR=%LJBINDIR%\release
+	@set LJLIBDIR=%LJLIBDIR%\release
+	@set LJCOMPILE=%LJCOMPILE% /MT
+) else (
+	@shift
+	@set LJCOMPILE=%LJCOMPILE% /Zi /MTd
+	@set LJLINK=%LJLINK% /debug
+	@set LJBINDIR=%LJBINDIR%\debug
+	@set LJLIBDIR=%LJLIBDIR%\debug
+)
 :NODEBUG
-@set LJBINDIR=%LJBINDIR%\release
-@set LJLIBDIR=%LJLIBDIR%\release
 mkdir %LJBINDIR%
 mkdir %LJINCLUDEDIR%
-@set LJCOMPILE=%LJCOMPILE% /MT
 @if "%1"=="amalg" goto :AMALGDLL
 @if "%1"=="static" goto :STATIC
+@set LJLIBDIR=%LJBINDIR%
 %LJCOMPILE% /DLUA_BUILD_AS_DLL lj_*.c lib_*.c
 @if errorlevel 1 goto :BAD
 %LJLINK% /DLL /out:%LJBINDIR%\%LJDLLNAME% lj_*.obj lib_*.obj
@@ -111,12 +112,13 @@ if exist %LJDLLNAME%.manifest^
 
 %LJCOMPILE% luajit.c
 @if errorlevel 1 goto :BAD
-%LJLINK% /out:%LJBINDIR%\luajit.exe luajit.obj %LJBINDIR%\%LJLIBNAME%
+
+%LJLINK% /out:%LJBINDIR%\luajit.exe luajit.obj %LJLIBDIR%\%LJLIBNAME%
 @if errorlevel 1 goto :BAD
 if exist luajit.exe.manifest^
   %LJMT% -manifest luajit.exe.manifest -outputresource:luajit.exe
 
-for %%f in %LJINCLUDEFILES% do copy %%f %LJINCLUDEDIR%
+@for %%f in %LJINCLUDEFILES% do @copy %%f %LJINCLUDEDIR%
   
 @del *.obj *.manifest minilua.exe buildvm.exe
 @echo.
@@ -132,5 +134,5 @@ for %%f in %LJINCLUDEFILES% do copy %%f %LJINCLUDEDIR%
 :FAIL
 @echo You must open a "Visual Studio .NET Command Prompt" to run this script
 :END
-
-cd ..\build
+@cd ..\build
+@cd ..\build
