@@ -13,9 +13,8 @@
 
 @if not defined INCLUDE goto :FAIL
 
-@cd ..\src
-
 @setlocal
+@cd ..\src
 @set LJCOMPILE=cl /nologo /c /O2 /W3 /D_CRT_SECURE_NO_DEPRECATE
 @set LJLINK=link /nologo
 @set LJMT=mt /nologo
@@ -29,6 +28,22 @@
 @set LJLIBDIR=..\lib
 @set LJINCLUDEDIR=..\include
 @set LJINCLUDEFILES=(lauxlib.h,lua.h,lua.hpp,luaconf.h,luajit.h,lualib.h)
+@set LJDEBUG=0
+@set LJSTATIC=0
+@set LJAMALG=0
+
+@if "%1"=="debug" @set LJDEBUG=1 
+@if "%1"=="static" @set LJSTATIC=1
+@if "%1"=="amalg" @set LJAMALG=1
+
+@if "%2"=="debug" @set LJDEBUG=1 
+@if "%2"=="static" @set LJSTATIC=1
+@if "%2"=="amalg" @set LJAMALG=1
+
+@if "%3"=="debug" @set LJDEBUG=1 
+@if "%3"=="static" @set LJSTATIC=1
+@if "%3"=="amalg" @set LJAMALG=1
+
 
 %LJCOMPILE% host\minilua.c
 @if errorlevel 1 goto :BAD
@@ -72,28 +87,32 @@ buildvm -m vmdef -o jit\vmdef.lua %ALL_LIB%
 buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 @if errorlevel 1 goto :BAD
 
-@if "%1" neq "debug" (
-	@set LJBINDIR=%LJBINDIR%\release
-	@set LJLIBDIR=%LJLIBDIR%\release
-	@set LJCOMPILE=%LJCOMPILE% /MT
-) else (
-	@shift
+@if %LJDEBUG%==1 (
 	@set LJCOMPILE=%LJCOMPILE% /Zi /MTd
 	@set LJLINK=%LJLINK% /debug
 	@set LJBINDIR=%LJBINDIR%\debug
 	@set LJLIBDIR=%LJLIBDIR%\debug
+) else (
+	
+	@set LJBINDIR=%LJBINDIR%\release
+	@set LJLIBDIR=%LJLIBDIR%\release
+	@set LJCOMPILE=%LJCOMPILE% /MT
 )
-:NODEBUG
+
 mkdir %LJBINDIR%
 mkdir %LJINCLUDEDIR%
-@if "%1"=="amalg" goto :AMALGDLL
-@if "%1"=="static" goto :STATIC
+
+@if %LJAMALG%==1 goto :AMALGDLL
+@if %LJSTATIC%==1 goto :STATIC
+
+:DLL
 @set LJLIBDIR=%LJBINDIR%
 %LJCOMPILE% /DLUA_BUILD_AS_DLL lj_*.c lib_*.c
 @if errorlevel 1 goto :BAD
 %LJLINK% /DLL /out:%LJBINDIR%\%LJDLLNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
 @goto :MTDLL
+
 :STATIC
 mkdir %LJLIBDIR%
 %LJCOMPILE% lj_*.c lib_*.c
@@ -101,11 +120,13 @@ mkdir %LJLIBDIR%
 %LJLIB% /OUT:%LJLIBDIR%\%LJLIBNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
 @goto :MTDLL
+
 :AMALGDLL
 %LJCOMPILE% /MD /DLUA_BUILD_AS_DLL ljamalg.c
 @if errorlevel 1 goto :BAD
 %LJLINK% /DLL /out:%LJBINDIR%\%LJDLLNAME% ljamalg.obj lj_vm.obj
 @if errorlevel 1 goto :BAD
+
 :MTDLL
 if exist %LJDLLNAME%.manifest^
   %LJMT% -manifest %LJDLLNAME%.manifest -outputresource:%LJDLLNAME%;2
@@ -134,5 +155,3 @@ if exist luajit.exe.manifest^
 :FAIL
 @echo You must open a "Visual Studio .NET Command Prompt" to run this script
 :END
-@cd ..\build
-@cd ..\build
