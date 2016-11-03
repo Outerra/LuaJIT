@@ -26,7 +26,7 @@
 @set ALL_LIB=lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
 @set LJBINDIR=..\bin
 @set LJLIBDIR=..\lib
-@set LJINCLUDEDIR=..\include
+@set LJINCLUDEDIR=..\include\luaJIT
 @set LJINCLUDEFILES=(lauxlib.h,lua.h,lua.hpp,luaconf.h,luajit.h,lualib.h)
 @set LJDEBUG=0
 @set LJSTATIC=0
@@ -155,3 +155,4 @@ if exist luajit.exe.manifest^
 :FAIL
 @echo You must open a "Visual Studio .NET Command Prompt" to run this script
 :END
+@endlocal
