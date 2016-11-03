@@ -79,13 +79,11 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 @set LJBINDIR=%LJBINDIR%\debug
 @set LJLIBDIR=%LJLIBDIR%\debug
 mkdir %LJBINDIR%
-mkdir %LJLIBDIR%
 mkdir %LJINCLUDEDIR%
 :NODEBUG
 @set LJBINDIR=%LJBINDIR%\release
-@set LJBINDIR=%LJLIBDIR%\release
+@set LJLIBDIR=%LJLIBDIR%\release
 mkdir %LJBINDIR%
-mkdir %LJLIBDIR%
 mkdir %LJINCLUDEDIR%
 @set LJCOMPILE=%LJCOMPILE% /MT
 @if "%1"=="amalg" goto :AMALGDLL
@@ -96,6 +94,7 @@ mkdir %LJINCLUDEDIR%
 @if errorlevel 1 goto :BAD
 @goto :MTDLL
 :STATIC
+mkdir %LJLIBDIR%
 %LJCOMPILE% lj_*.c lib_*.c
 @if errorlevel 1 goto :BAD
 %LJLIB% /OUT:%LJLIBDIR%\%LJLIBNAME% lj_*.obj lib_*.obj
