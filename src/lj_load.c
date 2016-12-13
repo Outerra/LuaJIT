@@ -52,7 +52,7 @@ LUA_API int lua_loadx(lua_State *L, lua_Reader reader, void *data,
   int status;
   ls.rfunc = reader;
   ls.rdata = data;
-  ls.chunkarg = chunkname ? chunkname : "?";
+  ls.chunkarg = chunkname ? coid_token_from_cstr(chunkname) : coid_token_from_cstr("?");
   ls.mode = mode;
   lj_str_initbuf(&ls.sb);
   status = lj_vm_cpcall(L, NULL, &ls, cpparser);

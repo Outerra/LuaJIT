@@ -479,4 +479,3 @@ void lj_lex_init(lua_State *L)
     s->reserved = (uint8_t)(i+1);
   }
 }
-

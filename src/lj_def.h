@@ -8,7 +8,9 @@
 
 #include "lua.h"
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && _MSC_VER >= 1800
+#include <stdint.h>
+#elif defined(_MSC_VER)
 /* MSVC is stuck in the last century and doesn't have C99's stdint.h. */
 typedef __int8 int8_t;
 typedef __int16 int16_t;
@@ -254,19 +256,21 @@ static LJ_AINLINE uint32_t lj_fls(uint32_t x)
   return _CountLeadingZeros(x) ^ 31;
 }
 #else
-unsigned char _BitScanForward(uint32_t *, unsigned long);
-unsigned char _BitScanReverse(uint32_t *, unsigned long);
+
+//unsigned char _BitScanForward(uint32_t *, unsigned long);
+//unsigned char _BitScanReverse(uint32_t *, unsigned long);
+
 #pragma intrinsic(_BitScanForward)
 #pragma intrinsic(_BitScanReverse)
 
 static LJ_AINLINE uint32_t lj_ffs(uint32_t x)
 {
-  uint32_t r; _BitScanForward(&r, x); return r;
+  uint32_t r = 0; _BitScanForward((unsigned long *)&r, x); return r;
 }
 
 static LJ_AINLINE uint32_t lj_fls(uint32_t x)
 {
-  uint32_t r; _BitScanReverse(&r, x); return r;
+  uint32_t r = 0; _BitScanReverse((unsigned long *)r, x); return r;
 }
 #endif
 

@@ -21,16 +21,18 @@
 @set LJLIB=lib /nologo /nodefaultlib
 @set DASMDIR=..\dynasm
 @set DASM=%DASMDIR%\dynasm.lua
+@set COMMDIR=..\..
 @set LJDLLNAME=luajit.dll
 @set LJLIBNAME=luajit.lib
 @set ALL_LIB=lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
 @set LJBINDIR=..\bin
 @set LJLIBDIR=..\lib
 @set LJINCLUDEDIR=..\include\luaJIT
-@set LJINCLUDEFILES=(lauxlib.h,lua.h,lua.hpp,luaconf.h,luajit.h,lualib.h)
+@set LJINCLUDEFILES=(lauxlib.h,lua.h,lua.hpp,luaconf.h,luajit.h,lualib.h,luaext.h)
 @set LJDEBUG=0
 @set LJSTATIC=0
 @set LJAMALG=0
+@set ADDITIONAL_INCLUDE=/I"%COMMDIR%"
 
 @if "%1"=="debug" @set LJDEBUG=1 
 @if "%1"=="static" @set LJSTATIC=1
@@ -107,7 +109,7 @@ mkdir %LJINCLUDEDIR%
 
 :DLL
 @set LJLIBDIR=%LJBINDIR%
-%LJCOMPILE% /DLUA_BUILD_AS_DLL lj_*.c lib_*.c
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /EHsc /DLUA_BUILD_AS_DLL lj_*.c lib_*.c lib_ext.cpp
 @if errorlevel 1 goto :BAD
 %LJLINK% /DLL /out:%LJBINDIR%\%LJDLLNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
@@ -115,14 +117,14 @@ mkdir %LJINCLUDEDIR%
 
 :STATIC
 mkdir %LJLIBDIR%
-%LJCOMPILE% lj_*.c lib_*.c
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /EHsc lj_*.c lib_*.c lib_ext.cpp
 @if errorlevel 1 goto :BAD
 %LJLIB% /OUT:%LJLIBDIR%\%LJLIBNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
 @goto :MTDLL
 
 :AMALGDLL
-%LJCOMPILE% /MD /DLUA_BUILD_AS_DLL ljamalg.c
+%LJCOMPILE% MD /DLUA_BUILD_AS_DLL ljamalg.c
 @if errorlevel 1 goto :BAD
 %LJLINK% /DLL /out:%LJBINDIR%\%LJDLLNAME% ljamalg.obj lj_vm.obj
 @if errorlevel 1 goto :BAD

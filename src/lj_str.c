@@ -11,6 +11,7 @@
 #define lj_str_c
 #define LUA_CORE
 
+#include "lj_coidtoken.h"
 #include "lj_obj.h"
 #include "lj_gc.h"
 #include "lj_err.h"
@@ -255,6 +256,12 @@ const char *lj_str_pushvf(lua_State *L, const char *fmt, va_list argp)
     addstr(L, sb, fmt, (MSize)(e-fmt));
     /* This function only handles %s, %c, %d, %f and %p formats. */
     switch (e[1]) {
+    case 't': {
+        coidtoken t = va_arg(argp, coidtoken);
+        if (t._ptr == t._pte) t = coid_token_from_cstr("(null)");
+        addstr(L, sb, t._ptr, coid_tok_len(t));
+        break;
+    }
     case 's': {
       const char *s = va_arg(argp, char *);
       if (s == NULL) s = "(null)";

@@ -35,10 +35,10 @@
 static LJ_NOINLINE void bcread_error(LexState *ls, ErrMsg em)
 {
   lua_State *L = ls->L;
-  const char *name = ls->chunkarg;
-  if (*name == BCDUMP_HEAD1) name = "(binary)";
-  else if (*name == '@' || *name == '=') name++;
-  lj_str_pushf(L, "%s: %s", name, err2msg(em));
+  coidtoken name = ls->chunkarg;
+  if (name._ptr[0] == BCDUMP_HEAD1) name = coid_token_from_cstr("(binary)");
+  else if (name._ptr[0] == '@' || name._ptr[0] == '=') name._ptr++;
+  lj_str_pushf(L, "%t: %s", name, err2msg(em));
   lj_err_throw(L, LUA_ERRSYNTAX);
 }
 
@@ -442,7 +442,7 @@ static int bcread_header(LexState *ls)
 #endif
   }
   if ((flags & BCDUMP_F_STRIP)) {
-    ls->chunkname = lj_str_newz(ls->L, ls->chunkarg);
+    ls->chunkname = lj_str_new(ls->L, ls->chunkarg._ptr, ls->chunkarg._pte - ls->chunkarg._ptr);
   } else {
     MSize len = bcread_uleb128(ls);
     bcread_need(ls, len);

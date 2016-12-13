@@ -2727,7 +2727,7 @@ GCproto *lj_parse(LexState *ls)
 #ifdef LUAJIT_DISABLE_DEBUGINFO
   ls->chunkname = lj_str_newlit(L, "=");
 #else
-  ls->chunkname = lj_str_newz(L, ls->chunkarg);
+  ls->chunkname = lj_str_new(L, ls->chunkarg._ptr, ls->chunkarg._pte - ls->chunkarg._ptr);
 #endif
   setstrV(L, L->top, ls->chunkname);  /* Anchor chunkname string. */
   incr_top(L);
