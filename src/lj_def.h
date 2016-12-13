@@ -6,6 +6,10 @@
 #ifndef _LJ_DEF_H
 #define _LJ_DEF_H
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include "lua.h"
 
 #if defined(_MSC_VER)
@@ -269,12 +273,12 @@ static LJ_AINLINE uint32_t lj_fls(uint32_t x)
 #pragma intrinsic(_BitScanForward)
 #pragma intrinsic(_BitScanReverse)
 
-static LJ_AINLINE ulong_t lj_ffs(ulong_t x)
+static LJ_AINLINE uint32_t lj_ffs(uint32_t x)
 {
     ulong_t r = 0; _BitScanForward(&r, x); return r;
 }
 
-static LJ_AINLINE ulong_t lj_fls(ulong_t x)
+static LJ_AINLINE uint32_t lj_fls(uint32_t x)
 {
     ulong_t r = 0; _BitScanReverse(&r, x); return r;
 }
@@ -358,6 +362,10 @@ static LJ_AINLINE uint32_t lj_getu32(const void *v)
 #else
 #define LJ_STATIC_ASSERT(cond) \
   extern void LJ_ASSERT_NAME(__LINE__)(int STATIC_ASSERTION_FAILED[(cond)?1:-1])
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

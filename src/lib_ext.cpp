@@ -15,7 +15,7 @@ extern TValue *index2adr(lua_State *L, int idx);
 extern TValue *cpparser(lua_State *L, lua_CFunction dummy, void *ud);
 extern const char *reader_string(lua_State *L, void *ud, size_t *size);
 
-static int lua_loadx_ext(lua_State *L, lua_Reader reader, void *data,
+int lua_loadx_ext(lua_State *L, lua_Reader reader, void *data,
     const coidtoken& chunkname, const char *mode)
 {
     LexState ls;
@@ -32,7 +32,7 @@ static int lua_loadx_ext(lua_State *L, lua_Reader reader, void *data,
 }
 
 
-static int lua_load_ext(lua_State *L, lua_Reader reader, void *data,
+int lua_load_ext(lua_State *L, lua_Reader reader, void *data,
     const coidtoken& chunkname)
 {
     return lua_loadx_ext(L, reader, data, chunkname, NULL);
@@ -44,7 +44,7 @@ typedef struct StringReaderCtx {
 } StringReaderCtx;
 
 
-static int luaL_loadbufferx_ext(lua_State *L, const char *buf, size_t size,
+int luaL_loadbufferx_ext(lua_State *L, const char *buf, size_t size,
     const coidtoken& name, const char *mode)
 {
     StringReaderCtx ctx;
@@ -53,7 +53,7 @@ static int luaL_loadbufferx_ext(lua_State *L, const char *buf, size_t size,
     return lua_loadx_ext(L, reader_string, &ctx, name, mode);
 }
 
-static int luaL_loadbuffer_ext(lua_State *L, const char *buf, size_t size,
+int luaL_loadbuffer_ext(lua_State *L, const char *buf, size_t size,
     const coidtoken& name)
 {
     return luaL_loadbufferx_ext(L, buf, size, name, NULL);
@@ -63,7 +63,7 @@ static int luaL_loadbuffer_ext(lua_State *L, const char *buf, size_t size,
 
 #define lua_totoken(L, idx) lua_toltoken(L, idx, NULL)
 
-static void lua_pushtoken(lua_State*L, const coid::token& t) {
+void lua_pushtoken(lua_State*L, const coid::token& t) {
     if (t.is_empty()){
         setnilV(L->top);
     }
@@ -76,7 +76,7 @@ static void lua_pushtoken(lua_State*L, const coid::token& t) {
     incr_top(L);
 }
 
-static coid::token lua_toltoken(lua_State *L, int idx, size_t *len)
+coid::token lua_toltoken(lua_State *L, int idx, size_t *len)
 {
     TValue *o = index2adr(L, idx);
     GCstr *s;
@@ -109,7 +109,7 @@ coidtoken token_to_ctoken(const coid::token& tok) {
     return result;
 };
 
-static int luaL_loadbuffer(lua_State *L, const char *buf, size_t size,
+int  luaL_loadbuffer(lua_State *L, const char *buf, size_t size,
     const coid::token& name) {
     return luaL_loadbuffer_ext(L, buf, size, token_to_ctoken(name));
 }

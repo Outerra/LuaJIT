@@ -25,7 +25,7 @@
 
 /* -- Load Lua source code and bytecode ----------------------------------- */
 
-static TValue *cpparser(lua_State *L, lua_CFunction dummy, void *ud)
+TValue *cpparser(lua_State *L, lua_CFunction dummy, void *ud)
 {
   LexState *ls = (LexState *)ud;
   GCproto *pt;
@@ -124,7 +124,7 @@ typedef struct StringReaderCtx {
   size_t size;
 } StringReaderCtx;
 
-static const char *reader_string(lua_State *L, void *ud, size_t *size)
+const char *reader_string(lua_State *L, void *ud, size_t *size)
 {
   StringReaderCtx *ctx = (StringReaderCtx *)ud;
   UNUSED(L);

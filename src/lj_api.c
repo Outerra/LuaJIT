@@ -30,7 +30,7 @@
 #define api_checknelems(L, n)		api_check(L, (n) <= (L->top - L->base))
 #define api_checkvalidindex(L, i)	api_check(L, (i) != niltv(L))
 
-static TValue *index2adr(lua_State *L, int idx)
+TValue *index2adr(lua_State *L, int idx)
 {
   if (idx > 0) {
     TValue *o = L->base + (idx - 1);
