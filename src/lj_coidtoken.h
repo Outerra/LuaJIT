@@ -15,6 +15,6 @@ static coidtoken coid_token_from_cstr(const char* s) {
     return res;
 }
 
-#define coid_tok_len(t) t._pte - t._ptr
+#define coid_tok_len(t) ((uint32_t)(t._pte - t._ptr))
 #define coid_tok_is_empty(t) (t._pte == t._ptr)
 #endif

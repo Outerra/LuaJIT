@@ -8,9 +8,10 @@
 
 #include "lua.h"
 
+#if defined(_MSC_VER)
 #if defined(_MSC_VER) && _MSC_VER >= 1800
 #include <stdint.h>
-#elif defined(_MSC_VER)
+#else
 /* MSVC is stuck in the last century and doesn't have C99's stdint.h. */
 typedef __int8 int8_t;
 typedef __int16 int16_t;
@@ -20,6 +21,8 @@ typedef unsigned __int8 uint8_t;
 typedef unsigned __int16 uint16_t;
 typedef unsigned __int32 uint32_t;
 typedef unsigned __int64 uint64_t;
+#endif
+
 #ifdef _WIN64
 typedef __int64 intptr_t;
 typedef unsigned __int64 uintptr_t;
@@ -42,6 +45,9 @@ typedef unsigned int uintptr_t;
 #else
 #include <stdint.h>
 #endif
+
+typedef long long_t;
+typedef unsigned long ulong_t;
 
 /* Needed everywhere. */
 #include <string.h>
@@ -263,14 +269,14 @@ static LJ_AINLINE uint32_t lj_fls(uint32_t x)
 #pragma intrinsic(_BitScanForward)
 #pragma intrinsic(_BitScanReverse)
 
-static LJ_AINLINE uint32_t lj_ffs(uint32_t x)
+static LJ_AINLINE ulong_t lj_ffs(ulong_t x)
 {
-  uint32_t r = 0; _BitScanForward((unsigned long *)&r, x); return r;
+    ulong_t r = 0; _BitScanForward(&r, x); return r;
 }
 
-static LJ_AINLINE uint32_t lj_fls(uint32_t x)
+static LJ_AINLINE ulong_t lj_fls(ulong_t x)
 {
-  uint32_t r = 0; _BitScanReverse((unsigned long *)r, x); return r;
+    ulong_t r = 0; _BitScanReverse(&r, x); return r;
 }
 #endif
 
