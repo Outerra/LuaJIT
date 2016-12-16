@@ -11,4 +11,7 @@ LUA_API int   (lua_load)(lua_State *L, lua_Reader reader, void *dt,
 LUALIB_API int (luaL_loadbuffer)(lua_State *L, const char *buff, size_t sz,
     const coid::token& name);
 
+LUA_API void lua_getfield(lua_State *L, int idx, const coid::token& k);
+LUA_API void lua_setfield(lua_State *L, int idx, const coid::token& k);
+
 #endif 

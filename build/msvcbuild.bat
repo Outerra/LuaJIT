@@ -24,6 +24,7 @@
 @set COMMDIR=..\..
 @set LJDLLNAME=luajit.dll
 @set LJLIBNAME=luajit.lib
+@set LJPDBNAME=luajit.pdb
 @set ALL_LIB=lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
 @set LJBINDIR=..\bin
 @set LJLIBDIR=..\lib
@@ -109,15 +110,15 @@ mkdir %LJINCLUDEDIR%
 
 :DLL
 @set LJLIBDIR=%LJBINDIR%
-%LJCOMPILE% %ADDITIONAL_INCLUDE% /EHsc /DLUA_BUILD_AS_DLL lj_*.c lib_*.c lib_ext.cpp
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_DLL lj_*.c lib_*.c lib_ext.cpp
 @if errorlevel 1 goto :BAD
-%LJLINK% /DLL /out:%LJBINDIR%\%LJDLLNAME% lj_*.obj lib_*.obj
+%LJLINK% /DLL /OUT:%LJBINDIR%\%LJDLLNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
 @goto :MTDLL
 
 :STATIC
 mkdir %LJLIBDIR%
-%LJCOMPILE% %ADDITIONAL_INCLUDE% /EHsc lj_*.c lib_*.c lib_ext.cpp
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc lj_*.c lib_*.c lib_ext.cpp
 @if errorlevel 1 goto :BAD
 %LJLIB% /OUT:%LJLIBDIR%\%LJLIBNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD

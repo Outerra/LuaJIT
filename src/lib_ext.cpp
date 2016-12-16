@@ -11,9 +11,15 @@ extern "C"{
 #include "lj_frame.h"
 #include "lj_coidtoken.h"
 
+#define api_checknelems(L, n)		api_check(L, (n) <= (L->top - L->base))
+#define api_checkvalidindex(L, i)	api_check(L, (i) != niltv(L))
+
 extern TValue *index2adr(lua_State *L, int idx);
 extern TValue *cpparser(lua_State *L, lua_CFunction dummy, void *ud);
 extern const char *reader_string(lua_State *L, void *ud, size_t *size);
+extern cTValue *lj_meta_tget(lua_State *L, cTValue *o, cTValue *k);
+extern TValue *lj_meta_tset(lua_State *L, cTValue *o, cTValue *k);
+
 
 int lua_loadx_ext(lua_State *L, lua_Reader reader, void *data,
     const coidtoken& chunkname, const char *mode)
@@ -112,4 +118,43 @@ coidtoken token_to_ctoken(const coid::token& tok) {
 int  luaL_loadbuffer(lua_State *L, const char *buf, size_t size,
     const coid::token& name) {
     return luaL_loadbuffer_ext(L, buf, size, token_to_ctoken(name));
+}
+
+void lua_getfield(lua_State *L, int idx, const coid::token& k)
+{
+    cTValue *v, *t = index2adr(L, idx);
+    TValue key;
+    api_checkvalidindex(L, t);
+    setstrV(L, &key, lj_str_new(L, k._ptr, k._pte - k._ptr));
+    v = lj_meta_tget(L, t, &key);
+    if (v == NULL) {
+        L->top += 2;
+        lj_vm_call(L, L->top - 2, 1 + 1);
+        L->top -= 2;
+        v = L->top + 1;
+    }
+    copyTV(L, L->top, v);
+    incr_top(L);
+}
+
+void lua_setfield(lua_State *L, int idx, const coid::token& k)
+{
+    TValue *o;
+    TValue key;
+    cTValue *t = index2adr(L, idx);
+    api_checknelems(L, 1);
+    api_checkvalidindex(L, t);
+    setstrV(L, &key, lj_str_new(L, k._ptr, k._pte - k._ptr));
+    o = lj_meta_tset(L, t, &key);
+    if (o) {
+        L->top--;
+        /* NOBARRIER: lj_meta_tset ensures the table is not black. */
+        copyTV(L, o, L->top);
+    }
+    else {
+        L->top += 3;
+        copyTV(L, L->top - 1, L->top - 6);
+        lj_vm_call(L, L->top - 3, 0 + 1);
+        L->top -= 2;
+    }
 }

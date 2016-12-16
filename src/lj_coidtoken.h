@@ -11,7 +11,7 @@ typedef struct coidtoken {
 static coidtoken coid_token_from_cstr(const char* s) {
     coidtoken res;
     res._ptr = s;
-    res._ptr = res._ptr + strlen(s);
+    res._pte = res._ptr + strlen(s);
     return res;
 }
 
