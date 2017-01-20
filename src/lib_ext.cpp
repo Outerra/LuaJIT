@@ -158,3 +158,32 @@ void lua_setfield(lua_State *L, int idx, const coid::token& k)
         L->top -= 2;
     }
 }
+
+bool lua_hasfield(lua_State *L, int idx, const coid::token& k){
+	if (lua_istable(L, idx)){
+		return false;
+	}
+
+	lua_getfield(L, idx, k);
+	if (lua_isnil(L, -1)){
+		lua_pop(L, 1);
+		return false;
+	}
+	else{
+		lua_pop(L, 1);
+		return true;
+	}
+}
+
+void luaL_where_ext(lua_State *L, int level) {
+	lua_Debug ar;
+	if (lua_getstack(L, level, &ar)) {  /* check function at level */
+		lua_getinfo(L, "Sl", &ar);  /* get info about it */
+		if (ar.currentline > 0) {  /* is there info? */
+			lua_pushstring(L, ar.short_src);
+			lua_pushnumber(L, ar.currentline);
+			return;
+		}
+	}
+	lua_pushnil (L);  /* else, no information available... */
+}
