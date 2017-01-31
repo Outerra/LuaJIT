@@ -29,7 +29,7 @@
 @set LJBINDIR=..\bin
 @set LJLIBDIR=..\lib
 @set LJINCLUDEDIR=..\include\luaJIT
-@set LJINCLUDEFILES=(lauxlib.h,lua.h,lua.hpp,luaconf.h,luajit.h,lualib.h,luaext.h,lua_utils.h)
+@set LJINCLUDEFILES=(lauxlib.h,lua.h,lua.hpp,luaconf.h,luajit.h,lualib.h,luaext.h)
 @set LJDEBUG=0
 @set LJSTATIC=0
 @set LJAMALG=0
