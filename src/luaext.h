@@ -16,5 +16,6 @@ LUA_API void lua_getfield(lua_State *L, int idx, const coid::token& k);
 LUA_API void lua_setfield(lua_State *L, int idx, const coid::token& k);
 LUA_API bool lua_hasfield(lua_State *L, int idx, const coid::token& k);
 LUA_API void luaL_where_ext(lua_State *L, int level);
+//LUA_API void lua_pushcopy(lua_State *L, int idx);
 
 #endif 

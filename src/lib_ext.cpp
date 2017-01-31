@@ -187,3 +187,12 @@ void luaL_where_ext(lua_State *L, int level) {
 	}
 	lua_pushnil (L);  /* else, no information available... */
 }
+
+void lua_pushcopy(lua_State *L, int idx) {
+    if (lua_isfunction(L, idx)) {
+        lua_pushcfunction(L, lua_tocfunction(L, idx));
+    }
+    else {
+        lua_pushnil(L);
+    }
+}

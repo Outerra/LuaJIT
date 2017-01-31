@@ -93,12 +93,12 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 @if %LJDEBUG%==1 (
 	@set LJCOMPILE=%LJCOMPILE% /Zi /MTd
 	@set LJLINK=%LJLINK% /debug
-	@set LJBINDIR=%LJBINDIR%\debug
-	@set LJLIBDIR=%LJLIBDIR%\debug
+	@set LJBINDIR=%LJBINDIR%\Debug
+	@set LJLIBDIR=%LJLIBDIR%\Debug
 ) else (
 	
-	@set LJBINDIR=%LJBINDIR%\release
-	@set LJLIBDIR=%LJLIBDIR%\release
+	@set LJBINDIR=%LJBINDIR%\Release
+	@set LJLIBDIR=%LJLIBDIR%\Release
 	@set LJCOMPILE=%LJCOMPILE% /MT
 )
 
