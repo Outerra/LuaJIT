@@ -160,7 +160,7 @@ void lua_setfield(lua_State *L, int idx, const coid::token& k)
 }
 
 bool lua_hasfield(lua_State *L, int idx, const coid::token& k){
-	if (lua_istable(L, idx)){
+	if (!lua_istable(L, idx)){
 		return false;
 	}
 
