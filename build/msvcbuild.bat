@@ -91,7 +91,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 @if errorlevel 1 goto :BAD
 
 @if %LJDEBUG%==1 (
-	@set LJCOMPILE=%LJCOMPILE% /Zi /MTd
+	@set LJCOMPILE=%LJCOMPILE% /Z7 /MTd
 	@set LJLINK=%LJLINK% /debug
 	@set LJBINDIR=%LJBINDIR%\Debug
 	@set LJLIBDIR=%LJLIBDIR%\Debug
@@ -99,7 +99,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 	
 	@set LJBINDIR=%LJBINDIR%\Release
 	@set LJLIBDIR=%LJLIBDIR%\Release
-	@set LJCOMPILE=%LJCOMPILE% /MT
+	@set LJCOMPILE=%LJCOMPILE% /Z7 /MT
 )
 
 mkdir %LJBINDIR%
