@@ -1,7 +1,13 @@
 #ifndef luaext_h
 #define luaext_h
 
-#include <comm/str.h>
+extern "C" {
+#include "luaconf.h"
+}
+
+namespace coid {
+    struct token;
+}
 
 #define lua_totoken(L,i)	lua_toltoken(L, (i), NULL)
 #define lua_pushbot(L)  (lua_pushvalue(L, 1), lua_remove(L, 1))

@@ -1,6 +1,8 @@
 #include <comm/str.h>
 
 extern "C"{
+    
+#define LUA_CORE
 
 #include "lj_state.h"
 #include "lj_gc.h"
@@ -69,7 +71,7 @@ int luaL_loadbuffer_ext(lua_State *L, const char *buf, size_t size,
 
 #define lua_totoken(L, idx) lua_toltoken(L, idx, NULL)
 
-void lua_pushtoken(lua_State*L, const coid::token& t) {
+LUA_API void lua_pushtoken(lua_State*L, const coid::token& t) {
     if (t.is_empty()){
         setnilV(L->top);
     }
@@ -82,7 +84,7 @@ void lua_pushtoken(lua_State*L, const coid::token& t) {
     incr_top(L);
 }
 
-coid::token lua_toltoken(lua_State *L, int idx, size_t *len)
+LUA_API coid::token lua_toltoken(lua_State *L, int idx, size_t *len)
 {
     TValue *o = index2adr(L, idx);
     GCstr *s;
@@ -115,12 +117,12 @@ coidtoken token_to_ctoken(const coid::token& tok) {
     return result;
 };
 
-int  luaL_loadbuffer(lua_State *L, const char *buf, size_t size,
+LUA_API int  luaL_loadbuffer(lua_State *L, const char *buf, size_t size,
     const coid::token& name) {
     return luaL_loadbuffer_ext(L, buf, size, token_to_ctoken(name));
 }
 
-void lua_getfield(lua_State *L, int idx, const coid::token& k)
+LUA_API void lua_getfield(lua_State *L, int idx, const coid::token& k)
 {
     cTValue *v, *t = index2adr(L, idx);
     TValue key;
@@ -137,7 +139,7 @@ void lua_getfield(lua_State *L, int idx, const coid::token& k)
     incr_top(L);
 }
 
-void lua_setfield(lua_State *L, int idx, const coid::token& k)
+LUA_API void lua_setfield(lua_State *L, int idx, const coid::token& k)
 {
     TValue *o;
     TValue key;
@@ -159,7 +161,7 @@ void lua_setfield(lua_State *L, int idx, const coid::token& k)
     }
 }
 
-bool lua_hasfield(lua_State *L, int idx, const coid::token& k){
+LUA_API bool lua_hasfield(lua_State *L, int idx, const coid::token& k){
 	if (!lua_istable(L, idx)){
 		return false;
 	}
@@ -175,7 +177,7 @@ bool lua_hasfield(lua_State *L, int idx, const coid::token& k){
 	}
 }
 
-void luaL_where_ext(lua_State *L, int level) {
+LUA_API void luaL_where_ext(lua_State *L, int level) {
 	lua_Debug ar;
 	if (lua_getstack(L, level, &ar)) {  /* check function at level */
 		lua_getinfo(L, "Sl", &ar);  /* get info about it */
@@ -188,7 +190,7 @@ void luaL_where_ext(lua_State *L, int level) {
 	lua_pushnil (L);  /* else, no information available... */
 }
 
-void lua_pushcopy(lua_State *L, int idx) {
+LUA_API void lua_pushcopy(lua_State *L, int idx) {
     if (lua_isfunction(L, idx)) {
         lua_pushcfunction(L, lua_tocfunction(L, idx));
     }

@@ -118,7 +118,7 @@ mkdir %LJINCLUDEDIR%
 
 :STATIC
 mkdir %LJLIBDIR%
-%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc lj_*.c lib_*.c lib_ext.cpp
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lj_*.c lib_*.c lib_ext.cpp
 @if errorlevel 1 goto :BAD
 %LJLIB% /OUT:%LJLIBDIR%\%LJLIBNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
