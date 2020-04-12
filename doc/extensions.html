@@ -3,8 +3,7 @@
 <head>
 <title>Extensions</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="Author" content="Mike Pall">
-<meta name="Copyright" content="Copyright (C) 2005-2016, Mike Pall">
+<meta name="Copyright" content="Copyright (C) 2005-2020">
 <meta name="Language" content="en">
 <link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
 <link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
@@ -28,7 +27,7 @@ td.excinterop {
 </head>
 <body>
 <div id="site">
-<a href="http://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
 </div>
 <div id="head">
 <h1>Extensions</h1>
@@ -37,7 +36,7 @@ td.excinterop {
 <ul><li>
 <a href="luajit.html">LuaJIT</a>
 <ul><li>
-<a href="http://luajit.org/download.html">Download <span class="ext">&raquo;</span></a>
+<a href="https://luajit.org/download.html">Download <span class="ext">&raquo;</span></a>
 </li><li>
 <a href="install.html">Installation</a>
 </li><li>
@@ -61,25 +60,20 @@ td.excinterop {
 </li></ul>
 </li><li>
 <a href="status.html">Status</a>
-<ul><li>
-<a href="changes.html">Changes</a>
-</li></ul>
 </li><li>
 <a href="faq.html">FAQ</a>
 </li><li>
-<a href="http://luajit.org/performance.html">Performance <span class="ext">&raquo;</span></a>
-</li><li>
 <a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
 </li><li>
-<a href="http://luajit.org/list.html">Mailing List <span class="ext">&raquo;</span></a>
+<a href="https://luajit.org/list.html">Mailing List <span class="ext">&raquo;</span></a>
 </li></ul>
 </div>
 <div id="main">
 <p>
 LuaJIT is fully upwards-compatible with Lua 5.1. It supports all
-<a href="http://www.lua.org/manual/5.1/manual.html#5"><span class="ext">&raquo;</span>&nbsp;standard Lua
+<a href="https://www.lua.org/manual/5.1/manual.html#5">standard Lua
 library functions</a> and the full set of
-<a href="http://www.lua.org/manual/5.1/manual.html#3"><span class="ext">&raquo;</span>&nbsp;Lua/C API
+<a href="https://www.lua.org/manual/5.1/manual.html#3">Lua/C API
 functions</a>.
 </p>
 <p>
@@ -103,7 +97,7 @@ LuaJIT comes with several built-in extension modules:
 <h3 id="bit"><tt>bit.*</tt> &mdash; Bitwise operations</h3>
 <p>
 LuaJIT supports all bitwise operations as defined by
-<a href="http://bitop.luajit.org"><span class="ext">&raquo;</span>&nbsp;Lua BitOp</a>:
+<a href="https://bitop.luajit.org">Lua BitOp</a>:
 </p>
 <pre class="code">
 bit.tobit  bit.tohex  bit.bnot    bit.band bit.bor  bit.bxor
@@ -112,7 +106,7 @@ bit.lshift bit.rshift bit.arshift bit.rol  bit.ror  bit.bswap
 <p>
 This module is a LuaJIT built-in &mdash; you don't need to download or
 install Lua BitOp. The Lua BitOp site has full documentation for all
-<a href="http://bitop.luajit.org/api.html"><span class="ext">&raquo;</span>&nbsp;Lua BitOp API functions</a>.
+<a href="https://bitop.luajit.org/api.html">Lua BitOp API functions</a>.
 </p>
 <p>
 Please make sure to <tt>require</tt> the module before using any of
@@ -213,6 +207,10 @@ for every call. The result is uniformly distributed between 0.0 and 1.0.
 It's correctly scaled up and rounded for <tt>math.random(n&nbsp;[,m])</tt> to
 preserve uniformity.
 </p>
+<p>
+Important: Neither this nor any other PRNG based on the simplistic
+<tt>math.random()</tt> API is suitable for cryptographic use.
+</p>
 
 <h3 id="io"><tt>io.*</tt> functions handle 64&nbsp;bit file offsets</h3>
 <p>
@@ -251,8 +249,8 @@ enabled:
 <li><tt>load(string|reader [, chunkname [,mode [,env]]])</tt>.</li>
 <li><tt>loadstring()</tt> is an alias for <tt>load()</tt>.</li>
 <li><tt>loadfile(filename [,mode [,env]])</tt>.</li>
-<li><tt>math.log(x [,base])</tt>.
-<li><tt>string.rep(s, n [,sep])</tt>.
+<li><tt>math.log(x [,base])</tt>.</li>
+<li><tt>string.rep(s, n [,sep])</tt>.</li>
 <li><tt>string.format()</tt>: <tt>%q</tt> reversible.
 <tt>%s</tt> checks <tt>__tostring</tt>.
 <tt>%a</tt> and <tt>"%A</tt> added.</li>
@@ -295,7 +293,7 @@ instead of <tt>true</tt>.</li>
 exit status.</li>
 <li><tt>debug.setmetatable()</tt> returns object.</li>
 <li><tt>debug.getuservalue()</tt> and <tt>debug.setuservalue()</tt>.</li>
-<li>Remove <tt>math.mod()</tt>, <tt>string.gfind()</tt>.
+<li>Remove <tt>math.mod()</tt>, <tt>string.gfind()</tt>.</li>
 </ul>
 <p>
 Note: this provides only partial compatibility with Lua 5.2 at the
@@ -398,7 +396,7 @@ lead to the termination of the process.</li>
 </div>
 <div id="foot">
 <hr class="hide">
-Copyright &copy; 2005-2016 Mike Pall
+Copyright &copy; 2005-2020
 <span class="noprint">
 &middot;
 <a href="contact.html">Contact</a>

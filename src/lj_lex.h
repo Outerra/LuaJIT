@@ -1,6 +1,6 @@
 /*
 ** Lexical analyzer.
-** Copyright (C) 2005-2016 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2020 Mike Pall. See Copyright Notice in luajit.h
 */
 
 #ifndef _LJ_LEX_H
@@ -75,6 +75,7 @@ typedef struct LexState {
     BCInsLine *bcstack;	/* Stack for bytecode instructions/line numbers. */
     MSize sizebcstack;	/* Size of bytecode stack. */
     uint32_t level;	/* Syntactical nesting level. */
+  int endmark;		/* Trust bytecode end marker, even if not at EOF. */
 } LexState;
 
 

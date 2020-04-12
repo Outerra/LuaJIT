@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- LuaJIT compiler dump module.
 --
--- Copyright (C) 2005-2016 Mike Pall. All rights reserved.
+-- Copyright (C) 2005-2020 Mike Pall. All rights reserved.
 -- Released under the MIT license. See Copyright Notice in luajit.h
 ----------------------------------------------------------------------------
 --
@@ -55,7 +55,7 @@
 
 -- Cache some library functions and objects.
 local jit = require("jit")
-assert(jit.version_num == 20004, "LuaJIT core/library version mismatch")
+assert(jit.version_num == 20005, "LuaJIT core/library version mismatch")
 local jutil = require("jit.util")
 local vmdef = require("jit.vmdef")
 local funcinfo, funcbc = jutil.funcinfo, jutil.funcbc
@@ -644,7 +644,8 @@ end
 local function dumpon(opt, outfile)
   if active then dumpoff() end
 
-  local colormode = os.getenv("COLORTERM") and "A" or "T"
+  local term = os.getenv("TERM")
+  local colormode = (term and term:match("color") or os.getenv("COLORTERM")) and "A" or "T"
   if opt then
     opt = gsub(opt, "[TAH]", function(mode) colormode = mode; return ""; end)
   end

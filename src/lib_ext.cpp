@@ -23,7 +23,7 @@ extern cTValue *lj_meta_tget(lua_State *L, cTValue *o, cTValue *k);
 extern TValue *lj_meta_tset(lua_State *L, cTValue *o, cTValue *k);
 
 
-int lua_loadx_ext(lua_State *L, lua_Reader reader, void *data,
+inline int lua_loadx_ext(lua_State *L, lua_Reader reader, void *data,
     const coidtoken& chunkname, const char *mode)
 {
     LexState ls;
@@ -40,7 +40,7 @@ int lua_loadx_ext(lua_State *L, lua_Reader reader, void *data,
 }
 
 
-int lua_load_ext(lua_State *L, lua_Reader reader, void *data,
+inline int lua_load_ext(lua_State *L, lua_Reader reader, void *data,
     const coidtoken& chunkname)
 {
     return lua_loadx_ext(L, reader, data, chunkname, NULL);
@@ -52,7 +52,7 @@ typedef struct StringReaderCtx {
 } StringReaderCtx;
 
 
-int luaL_loadbufferx_ext(lua_State *L, const char *buf, size_t size,
+inline int luaL_loadbufferx_ext(lua_State *L, const char *buf, size_t size,
     const coidtoken& name, const char *mode)
 {
     StringReaderCtx ctx;
@@ -61,7 +61,7 @@ int luaL_loadbufferx_ext(lua_State *L, const char *buf, size_t size,
     return lua_loadx_ext(L, reader_string, &ctx, name, mode);
 }
 
-int luaL_loadbuffer_ext(lua_State *L, const char *buf, size_t size,
+inline int luaL_loadbuffer_ext(lua_State *L, const char *buf, size_t size,
     const coidtoken& name)
 {
     return luaL_loadbufferx_ext(L, buf, size, name, NULL);

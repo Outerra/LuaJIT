@@ -91,7 +91,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 @if errorlevel 1 goto :BAD
 
 @if %LJDEBUG%==1 (
-	@set LJCOMPILE=%LJCOMPILE% /Z7 /MTd
+	@set LJCOMPILE=%LJCOMPILE% /Z7 /MTd /std:c++17 /Zc:__cplusplus
 	@set LJLINK=%LJLINK% /debug
 	@set LJBINDIR=%LJBINDIR%\Debug
 	@set LJLIBDIR=%LJLIBDIR%\Debug
@@ -99,7 +99,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 	
 	@set LJBINDIR=%LJBINDIR%\Release
 	@set LJLIBDIR=%LJLIBDIR%\Release
-	@set LJCOMPILE=%LJCOMPILE% /Z7 /MT
+	@set LJCOMPILE=%LJCOMPILE% /Z7 /MT /std:c++17 /Zc:__cplusplus
 )
 
 mkdir %LJBINDIR%
@@ -110,7 +110,8 @@ mkdir %LJINCLUDEDIR%
 
 :DLL
 @set LJLIBDIR=%LJBINDIR%
-%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_DLL lj_*.c lib_*.c lib_ext.cpp
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_DLL lj_*.c lib_*.c
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_DLL lib_ext.cpp
 @if errorlevel 1 goto :BAD
 %LJLINK% /DLL /OUT:%LJBINDIR%\%LJDLLNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
@@ -118,7 +119,8 @@ mkdir %LJINCLUDEDIR%
 
 :STATIC
 mkdir %LJLIBDIR%
-%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lj_*.c lib_*.c lib_ext.cpp
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lj_*.c lib_*.c
+%LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lib_ext.cpp
 @if errorlevel 1 goto :BAD
 %LJLIB% /OUT:%LJLIBDIR%\%LJLIBNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD

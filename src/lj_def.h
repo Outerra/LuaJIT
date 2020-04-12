@@ -1,6 +1,6 @@
 /*
 ** LuaJIT common internal definitions.
-** Copyright (C) 2005-2016 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2020 Mike Pall. See Copyright Notice in luajit.h
 */
 
 #ifndef _LJ_DEF_H
@@ -354,14 +354,18 @@ static LJ_AINLINE uint32_t lj_getu32(const void *v)
 #endif
 
 /* Static assertions. */
+#ifdef __cplusplus
+	#define LJ_STATIC_ASSERT(cond) static_assert(cond,"")
+#else
 #define LJ_ASSERT_NAME2(name, line)	name ## line
 #define LJ_ASSERT_NAME(line)		LJ_ASSERT_NAME2(lj_assert_, line)
 #ifdef __COUNTER__
-#define LJ_STATIC_ASSERT(cond) \
+#define LJ_STATIC_ASSERT(cond) 	\
   extern void LJ_ASSERT_NAME(__COUNTER__)(int STATIC_ASSERTION_FAILED[(cond)?1:-1])
 #else
 #define LJ_STATIC_ASSERT(cond) \
   extern void LJ_ASSERT_NAME(__LINE__)(int STATIC_ASSERTION_FAILED[(cond)?1:-1])
+#endif
 #endif
 
 #ifdef __cplusplus

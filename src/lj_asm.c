@@ -1,6 +1,6 @@
 /*
 ** IR assembler (SSA IR -> machine code).
-** Copyright (C) 2005-2016 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2020 Mike Pall. See Copyright Notice in luajit.h
 */
 
 #define lj_asm_c
@@ -22,7 +22,6 @@
 #include "lj_ircall.h"
 #include "lj_iropt.h"
 #include "lj_mcode.h"
-#include "lj_iropt.h"
 #include "lj_trace.h"
 #include "lj_snap.h"
 #include "lj_asm.h"
@@ -1719,12 +1718,13 @@ static void asm_setup_regsp(ASMState *as)
 #if LJ_SOFTFP
     case IR_MIN: case IR_MAX:
       if ((ir+1)->o != IR_HIOP) break;
-      /* fallthrough */
 #endif
+    /* fallthrough */
     /* C calls evict all scratch regs and return results in RID_RET. */
     case IR_SNEW: case IR_XSNEW: case IR_NEWREF:
       if (REGARG_NUMGPR < 3 && as->evenspill < 3)
 	as->evenspill = 3;  /* lj_str_new and lj_tab_newkey need 3 args. */
+      /* fallthrough */
     case IR_TNEW: case IR_TDUP: case IR_CNEW: case IR_CNEWI: case IR_TOSTR:
       ir->prev = REGSP_HINT(RID_RET);
       if (inloop)
@@ -1750,7 +1750,7 @@ static void asm_setup_regsp(ASMState *as)
 #endif
 	continue;
       }
-      /* fallthrough for integer POW */
+      /* fallthrough */ /* for integer POW */
     case IR_DIV: case IR_MOD:
       if (!irt_isnum(ir->t)) {
 	ir->prev = REGSP_HINT(RID_RET);

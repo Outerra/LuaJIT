@@ -1,6 +1,6 @@
 /*
 ** Error handling.
-** Copyright (C) 2005-2016 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2020 Mike Pall. See Copyright Notice in luajit.h
 */
 
 #define lj_err_c
@@ -153,6 +153,7 @@ static void *err_unwind(lua_State *L, void *stopcf, int errcode)
       if ((frame-1)->u32.lo == LJ_CONT_FFI_CALLBACK)
 	goto unwind_c;
 #endif
+      /* fallthrough */
     case FRAME_VARG:  /* Vararg frame. */
       frame = frame_prevd(frame);
       break;
@@ -289,12 +290,7 @@ LJ_FUNCA int lj_err_unwind_dwarf(int version, int actions,
 }
 
 #if LJ_UNWIND_EXT
-#if LJ_TARGET_OSX || defined(__OpenBSD__)
-/* Sorry, no thread safety for OSX. Complain to Apple, not me. */
-static _Unwind_Exception static_uex;
-#else
 static __thread _Unwind_Exception static_uex;
-#endif
 
 /* Raise DWARF2 exception. */
 static void err_raise_ext(int errcode)
