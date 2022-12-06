@@ -11,6 +11,7 @@ namespace coid {
 
 #define lua_totoken(L,i)	lua_toltoken(L, (i), NULL)
 #define lua_pushbot(L)  (lua_pushvalue(L, 1), lua_remove(L, 1))
+#define lua_isinteger(L,i) lua_isnumber(L,i)
 LUA_API void  (lua_pushtoken)(lua_State *L, const coid::token& s);
 LUA_API coid::token (lua_toltoken)(lua_State *L, int idx, size_t *len);
 LUA_API int   (lua_load)(lua_State *L, lua_Reader reader, void *dt,
