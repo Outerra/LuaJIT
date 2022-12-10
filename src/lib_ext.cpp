@@ -182,7 +182,7 @@ LUA_API void luaL_where_ext(lua_State *L, int level) {
 	if (lua_getstack(L, level, &ar)) {  /* check function at level */
 		lua_getinfo(L, "Sl", &ar);  /* get info about it */
 		if (ar.currentline > 0) {  /* is there info? */
-			lua_pushstring(L, ar.short_src);
+			lua_pushstring(L, ar.source);
 			lua_pushnumber(L, ar.currentline);
 			return;
 		}
