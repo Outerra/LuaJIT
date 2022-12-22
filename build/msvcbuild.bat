@@ -34,6 +34,7 @@
 @set LJSTATIC=0
 @set LJAMALG=0
 @set ADDITIONAL_INCLUDE=/I"%COMMDIR%"
+@set ADDITIONAL_DEFINES=
 
 @if "%1"=="debug" @set LJDEBUG=1 
 @if "%1"=="static" @set LJSTATIC=1
@@ -99,7 +100,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 	
 	@set LJBINDIR=%LJBINDIR%\Release
 	@set LJLIBDIR=%LJLIBDIR%\Release
-	@set LJCOMPILE=%LJCOMPILE% /O2 /MT /std:c++17 /Zc:__cplusplus
+	@set LJCOMPILE=%LJCOMPILE% /MT /std:c++17 /Zc:__cplusplus 
 )
 
 mkdir %LJBINDIR%
@@ -136,7 +137,11 @@ mkdir %LJLIBDIR%
 if exist %LJDLLNAME%.manifest^
   %LJMT% -manifest %LJDLLNAME%.manifest -outputresource:%LJDLLNAME%;2
 
-%LJCOMPILE% luajit.c
+@if %LJSTATIC%==1 (
+		%LJCOMPILE% /D "LUA_BUILD_AS_LIB" luajit.c
+)else (
+	%LJCOMPILE% luajit.c
+) 
 @if errorlevel 1 goto :BAD
 
 %LJLINK% /out:%LJBINDIR%\luajit.exe luajit.obj %LJLIBDIR%\%LJLIBNAME%
