@@ -99,7 +99,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 	
 	@set LJBINDIR=%LJBINDIR%\Release
 	@set LJLIBDIR=%LJLIBDIR%\Release
-	@set LJCOMPILE=%LJCOMPILE% /Z7 /MT /std:c++17 /Zc:__cplusplus
+	@set LJCOMPILE=%LJCOMPILE% /O2 /MT /std:c++17 /Zc:__cplusplus
 )
 
 mkdir %LJBINDIR%
