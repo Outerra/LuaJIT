@@ -22,6 +22,7 @@
 @set DASMDIR=..\dynasm
 @set DASM=%DASMDIR%\dynasm.lua
 @set COMMDIR=..\..
+@set LJSTATICNAME=luajit_static.lib
 @set LJDLLNAME=luajit.dll
 @set LJLIBNAME=luajit.lib
 @set LJPDBNAME=luajit.pdb
@@ -47,7 +48,6 @@
 @if "%3"=="debug" @set LJDEBUG=1 
 @if "%3"=="static" @set LJSTATIC=1
 @if "%3"=="amalg" @set LJAMALG=1
-
 
 %LJCOMPILE% host\minilua.c
 @if errorlevel 1 goto :BAD
@@ -123,7 +123,7 @@ mkdir %LJLIBDIR%
 %LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lj_*.c lib_*.c
 %LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lib_ext.cpp
 @if errorlevel 1 goto :BAD
-%LJLIB% /OUT:%LJLIBDIR%\%LJLIBNAME% lj_*.obj lib_*.obj
+%LJLIB% /OUT:%LJLIBDIR%\%LJSTATICNAME% lj_*.obj lib_*.obj
 @if errorlevel 1 goto :BAD
 @goto :MTDLL
 
