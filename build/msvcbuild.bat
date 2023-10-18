@@ -92,7 +92,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 @if errorlevel 1 goto :BAD
 
 @if %LJDEBUG%==1 (
-	@set LJCOMPILE=%LJCOMPILE% /Z7 /MTd /std:c++17 /Zc:__cplusplus
+	@set LJCOMPILE=%LJCOMPILE% /Z7 /MTd /std:c++20 /Zc:__cplusplus
 	@set LJLINK=%LJLINK% /debug
 	@set LJBINDIR=%LJBINDIR%\Debug
 	@set LJLIBDIR=%LJLIBDIR%\Debug
@@ -100,7 +100,7 @@ buildvm -m folddef -o lj_folddef.h lj_opt_fold.c
 	
 	@set LJBINDIR=%LJBINDIR%\Release
 	@set LJLIBDIR=%LJLIBDIR%\Release
-	@set LJCOMPILE=%LJCOMPILE% /MT /std:c++17 /Zc:__cplusplus 
+	@set LJCOMPILE=%LJCOMPILE% /MT /std:c++20 /Zc:__cplusplus 
 )
 
 mkdir %LJBINDIR%
@@ -119,6 +119,7 @@ mkdir %LJINCLUDEDIR%
 @goto :MTDLL
 
 :STATIC
+@set LJLIBNAME=%LJSTATICNAME%
 mkdir %LJLIBDIR%
 %LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lj_*.c lib_*.c
 %LJCOMPILE% %ADDITIONAL_INCLUDE% /Fd"%LJLIBDIR%\%LJPDBNAME%" /EHsc /DLUA_BUILD_AS_LIB lib_ext.cpp
